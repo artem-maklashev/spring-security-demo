@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>MainPage</h2>
+<div th:if="${isAdmin}">
+    <a href="/private">Private Page</a>
+</div>
+<div th:if="${isUser or isAdmin}">
+    <a href="/public">Public Page</a>
+</div>
+<!-- Кнопка входа -->
+<form action="/login" method="get">
+    <button type="submit">Log In</button>
+</form>
+<!-- Кнопка выхода -->
+<form action="/logout" method="post">
+    <button type="submit">Log Out</button>
+</form>
+</body>
+</html>
