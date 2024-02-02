@@ -16,12 +16,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
+    /**
+     * Создание бина менеджера аунтификации
+     * @return
+     * @throws Exception
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Метод создания пользователей и их ролей с хранением в памяти
+     * @param auth менеджер аутентификации
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -34,6 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("ADMIN");
     }
 
+    /**
+     * Создание цепочки ильтрации и обработки запросов
+     * @param http компонент запроса
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -43,17 +58,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/public/**").authenticated()
-                .antMatchers("/private/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                    .antMatchers("/", "/login").permitAll()
+                    .antMatchers("/public/**").authenticated()
+                    .antMatchers("/private/**").hasRole("ADMIN")
+                    .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/main", true)
-                .permitAll()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/main", true)
+                    .permitAll()
                 .and()
-                .logout()
-                .permitAll();
+                    .logout()
+                    .permitAll();
     }
 
 
